@@ -22,15 +22,10 @@ spec:
           image: django_app:devman
           ports:
             - containerPort: 80
-          env:
-          - name: SECRET_KEY
-            value: "somespecial"
-          - name: DATABASE_URL
-            value: "postgres://test_k8s:OwOtBep9Frut@192.168.1.212:5432/test_k8s"
-          - name: DEBUG
-            value: "FALSE"
-          - name: ALLOWED_HOSTS
-            value: "*"
+          envFrom:
+            - configMapRef:
+                name: django-configmap
+
 
 ---
 
