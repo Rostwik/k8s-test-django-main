@@ -39,10 +39,23 @@ $ docker-compose run web ./manage.py createsuperuser
 
 - minikube start --driver=virtualbox --no-vtx-check
 - kubectl apply -f configmap.yaml
-- kubectl apply -f deployment.yaml
+- kubectl apply -f django_deploy.yaml
 - minikube service list
 
 Если данные в configmap.yaml изменились необходимо выполнить следующие команды:
 
 - kubectl apply -f configmap.yaml
 - kubectl rollout restart deployment django-deployment
+
+Запуск ingress
+- kubectl apply -f ingress.yaml
+- minikube addons enable ingress
+- kubectl get ingress
+- полученный из предыдущего пункта ADDRESS добавить в /etc/hosts указав соответствие IP (ADDRESS) и host
+- проверить доступность приложения в браузере
+- если на втором шаге возникает ошибка, можно удалить кластер и установить все по новой
+
+```
+minikube delete --all
+```
+
