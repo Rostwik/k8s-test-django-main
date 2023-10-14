@@ -35,9 +35,21 @@ $ docker-compose run web ./manage.py createsuperuser
 
 ## Kubernetes
 
+
+
 Чтобы развернуть приложение в кластере, необходимо выполнить следующие команды:
 
 - minikube start --driver=virtualbox --no-vtx-check
+- Загрузите образ django в minikube (PowerShell Windows)
+```
+& minikube -p minikube docker-env --shell powershell | Invoke-Expression
+docker build -t django_app E:\DevMan\k8s-test-django-main\backend_main_django
+```
+Присвойте тег
+```
+& minikube -p minikube docker-env --shell powershell | Invoke-Expression
+docker tag django_app:latest django_app:devman
+```
 - kubectl apply -f configmap.yaml
 - kubectl apply -f django_deploy.yaml
 - minikube service list
