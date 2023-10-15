@@ -12,7 +12,7 @@ spec:
         image: django_app:devman
         envFrom:
           - configMapRef:
-              name: django-config
+              name: django-configmap
         imagePullPolicy: IfNotPresent
         command: ['sh', '-c', './manage.py migrate', '--no-input']
       restartPolicy: Never

@@ -33,13 +33,15 @@ $ docker-compose run web ./manage.py createsuperuser
 
 `DATABASE_URL` -- адрес для подключения к базе данных PostgreSQL. Другие СУБД сайт не поддерживает. [Формат записи](https://github.com/jacobian/dj-database-url#url-schema).
 
-## Kubernetes
-
-
-
+# Kubernetes
+## Поднимаем кластер
 Чтобы развернуть приложение в кластере, необходимо выполнить следующие команды:
 
-- minikube start --driver=virtualbox --no-vtx-check
+```
+minikube start --driver=virtualbox --no-vtx-check
+```
+
+## Разворачиваем приложение
 - Загрузите образ django в minikube (PowerShell Windows)
 ```
 & minikube -p minikube docker-env --shell powershell | Invoke-Expression
@@ -50,19 +52,34 @@ docker build -t django_app E:\DevMan\k8s-test-django-main\backend_main_django
 & minikube -p minikube docker-env --shell powershell | Invoke-Expression
 docker tag django_app:latest django_app:devman
 ```
-- kubectl apply -f configmap.yaml
-- kubectl apply -f django_deploy.yaml
-- minikube service list
+```
+kubectl apply -f configmap.yaml
+```
+```
+kubectl apply -f django_deploy.yaml
+```
+```
+minikube service list
+```
 
 Если данные в configmap.yaml изменились необходимо выполнить следующие команды:
+```
+kubectl apply -f configmap.yaml
+```
+```
+kubectl rollout restart deployment django-deployment
+```
 
-- kubectl apply -f configmap.yaml
-- kubectl rollout restart deployment django-deployment
-
-Запуск ingress
-- kubectl apply -f ingress.yaml
-- minikube addons enable ingress
-- kubectl get ingress
+## Запуск ingress
+```
+kubectl apply -f ingress.yaml
+```
+```
+inikube addons enable ingress
+```
+```
+kubectl get ingress
+```
 - полученный из предыдущего пункта ADDRESS добавить в /etc/hosts указав соответствие IP (ADDRESS) и host
 - проверить доступность приложения в браузере
 - если на втором шаге возникает ошибка, можно удалить кластер и установить все по новой
@@ -70,4 +87,29 @@ docker tag django_app:latest django_app:devman
 ```
 minikube delete --all
 ```
+
+## Удаление сессий
+```
+kubectl apply -f django_clearsessions_job.yaml
+```
+
+## Миграции
+
+```
+kubectl apply -f django_migrate_job.yaml
+```
+
+For creation one time job from existing cronjob
+
+## Запуск postgres с помощью helm chart
+
+- Установить [helm](https://github.com/helm/helm/releases)
+- Не забудьте прописать путь до helm в системную переменную PATH
+- Запустить release of postgresql chart
+```
+helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql
+```
+
+- При запуске вы увидите подробные инструкции, как подключиться к БД
+
 
