@@ -99,8 +99,6 @@ kubectl apply -f django_clearsessions_job.yaml
 kubectl apply -f django_migrate_job.yaml
 ```
 
-For creation one time job from existing cronjob
-
 ## Запуск postgres с помощью helm chart
 
 - Установить [helm](https://github.com/helm/helm/releases)
